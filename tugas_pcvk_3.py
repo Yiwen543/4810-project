@@ -275,8 +275,8 @@ def adaptive_thresholding(image, block_size=11, c=2):
 
 """# Visualize"""
 
-def visualize_results(original, mask, segmented, method_name, metrics=None):
-    """Visualize original, mask, segmented, and overlay"""
+def visualize_results(original, mask, segmented, method_name, metrics=None, save_path=None):
+    """Visualize original, mask, segmented, and overlay, and save image"""
     fig, axes = plt.subplots(1, 4, figsize=(20, 5))
 
     # Original image
@@ -319,6 +319,16 @@ def visualize_results(original, mask, segmented, method_name, metrics=None):
                     fontsize=14, fontweight='bold')
 
     plt.tight_layout()
+    
+    # --- 新增的保存代码 ---
+    if save_path:
+        plt.savefig(save_path)
+        print(f"Saved to: {save_path}")
+    # --------------------
+    
+    # 如果是在本地运行不需要弹窗，可以注释掉 plt.show()
+    # plt.show() 
+    plt.close() # 关闭画布，释放内存
 
 """# Process Image"""
 
@@ -338,12 +348,12 @@ rg = region_growing(image)
 ws = watershed_segmentation(image)
 at = adaptive_thresholding(image)
 
-visualize_results(image, mask, otsu, 'Otsu')
-visualize_results(image, mask, multiotsu, 'Multiotsu')
-visualize_results(image, mask, kmeans, 'KMeans')
-visualize_results(image, mask, rg, 'Region Growing')
-visualize_results(image, mask, ws, 'Watershed')
-visualize_results(image, mask, at, 'Adaptive Thresholding')
+visualize_results(image, mask, otsu, 'Otsu', save_path=os.path.join(OUTPUT_PATH, 'result_Otsu.png'))
+visualize_results(image, mask, multiotsu, 'Multiotsu', save_path=os.path.join(OUTPUT_PATH, 'result_Multiotsu.png'))
+visualize_results(image, mask, kmeans, 'KMeans', save_path=os.path.join(OUTPUT_PATH, 'result_KMeans.png'))
+visualize_results(image, mask, rg, 'Region Growing', save_path=os.path.join(OUTPUT_PATH, 'result_RegionGrowing.png'))
+visualize_results(image, mask, ws, 'Watershed', save_path=os.path.join(OUTPUT_PATH, 'result_Watershed.png'))
+visualize_results(image, mask, at, 'Adaptive Thresholding', save_path=os.path.join(OUTPUT_PATH, 'result_Adaptive.png'))
 
 erosion = morphological_operations(image=image, operation='erosion', kernel_size=15)
 dilation = morphological_operations(image=image, operation='dilation', kernel_size=15)
@@ -351,11 +361,11 @@ opening = morphological_operations(image=image, operation='opening', kernel_size
 closing = morphological_operations(image=image, operation='closing', kernel_size=15)
 opening_closing = morphological_operations(image=image, operation='opening+closing', kernel_size=15)
 
-visualize_results(image, mask, erosion, 'Erosion', calculate_metrics(erosion, mask))
-visualize_results(image, mask, dilation, 'Dilation', calculate_metrics(dilation, mask))
-visualize_results(image, mask, opening, 'Opening', calculate_metrics(opening, mask))
-visualize_results(image, mask, closing, 'Closing', calculate_metrics(closing, mask))
-visualize_results(image, mask, opening_closing, 'Opening + Closing', calculate_metrics(opening_closing, mask))
+visualize_results(image, mask, erosion, 'Erosion', metrics=calculate_metrics(erosion, mask), save_path=os.path.join(OUTPUT_PATH, 'result_Erosion.png'))
+visualize_results(image, mask, dilation, 'Dilation', metrics=calculate_metrics(dilation, mask), save_path=os.path.join(OUTPUT_PATH, 'result_Dilation.png'))
+visualize_results(image, mask, opening, 'Opening', metrics=calculate_metrics(opening, mask), save_path=os.path.join(OUTPUT_PATH, 'result_Opening.png'))
+visualize_results(image, mask, closing, 'Closing', metrics=calculate_metrics(closing, mask), save_path=os.path.join(OUTPUT_PATH, 'result_Closing.png'))
+visualize_results(image, mask, opening_closing, 'Opening + Closing', metrics=calculate_metrics(opening_closing, mask), save_path=os.path.join(OUTPUT_PATH, 'result_OpeningClosing.png'))
 
 """# Countour Adjusment
 
