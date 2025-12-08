@@ -320,15 +320,12 @@ def visualize_results(original, mask, segmented, method_name, metrics=None, save
 
     plt.tight_layout()
     
-    # --- 新增的保存代码 ---
     if save_path:
         plt.savefig(save_path)
         print(f"Saved to: {save_path}")
     # --------------------
-    
-    # 如果是在本地运行不需要弹窗，可以注释掉 plt.show()
     # plt.show() 
-    plt.close() # 关闭画布，释放内存
+    plt.close()
 
 """# Process Image"""
 
