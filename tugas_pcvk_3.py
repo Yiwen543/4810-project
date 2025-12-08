@@ -27,9 +27,9 @@ from skimage.feature import peak_local_max
 import os
 import glob
 
-IMAGE_PATH = r'data\images'
-MASK_PATH = r'data\masks'
-OUTPUT_PATH = r'output'
+IMAGE_PATH = os.path.join('data', 'images')
+MASK_PATH = os.path.join('data', 'masks')
+OUTPUT_PATH = 'output'
 
 os.makedirs(OUTPUT_PATH, exist_ok=True)
 
